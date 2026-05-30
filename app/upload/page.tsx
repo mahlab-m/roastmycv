@@ -27,6 +27,15 @@ export default function UploadPage() {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
+  const [roastsUsed, setRoastsUsed] = useState(0);
+
+  function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value;
+    setEmail(val);
+    if (val.includes("@")) {
+      setRoastsUsed(getUsageCount(val));
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -61,6 +70,8 @@ export default function UploadPage() {
     }
   }
 
+  const roastsRemaining = Math.max(0, FREE_LIMIT - roastsUsed);
+
   return (
     <main className="flex-1 flex flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-2xl">
@@ -71,15 +82,25 @@ export default function UploadPage() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-2">
-              Email address
-            </label>
+            <div className="flex justify-between items-baseline mb-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                Email address
+              </label>
+              {email.includes("@") && (
+                <span
+                  className={`text-xs ${roastsRemaining === 0 ? "text-red-400" : "text-white/40"}`}
+                >
+                  {roastsRemaining} free roast{roastsRemaining !== 1 ? "s" : ""}{" "}
+                  remaining
+                </span>
+              )}
+            </div>
             <input
               id="email"
               type="email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
               placeholder="you@example.com"
               className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-red-500 transition-colors"
             />
