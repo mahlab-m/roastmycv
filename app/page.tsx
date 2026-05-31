@@ -15,9 +15,9 @@ const fadeUp = {
 };
 
 const stats = [
-  { value: "1,200+", label: "CVs roasted" },
-  { value: "4.8★", label: "Average rating" },
-  { value: "3 min", label: "Time to results" },
+  { value: "Free", label: "First 3 roasts" },
+  { value: "2 min", label: "Time to results" },
+  { value: "100%", label: "Honest feedback" },
 ];
 
 const testimonials = [
@@ -60,7 +60,7 @@ export default function Home() {
 
         <AnimatedText
           text="Your CV is costing you interviews."
-          className="text-5xl md:text-7xl font-bold tracking-tight mb-4 max-w-4xl leading-tight"
+          className="text-5xl md:text-7xl font-bold tracking-tight mb-4 max-w-4xl leading-tight text-red-400"
         />
 
         <motion.p
@@ -68,7 +68,7 @@ export default function Home() {
           animate="visible"
           variants={fadeUp}
           custom={4}
-          className="text-xl md:text-2xl text-red-400 font-semibold mb-6"
+          className="text-xl md:text-2xl text-white font-semibold mb-6"
         >
           Find out why.
         </motion.p>
@@ -83,11 +83,16 @@ export default function Home() {
           AI that reads your CV like a BCG consultant and tells you exactly what's wrong — with rewrites you can use immediately.
         </motion.p>
 
-        <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={6} className="flex flex-col items-center gap-3">
+        <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={6} className="flex flex-col items-center gap-4">
           <ShimmerButton onClick={() => router.push("/upload")}>
             Roast My CV Free →
           </ShimmerButton>
-          <p className="text-muted-foreground/60 text-sm">3 free roasts · takes 2 minutes</p>
+          <p className="text-muted-foreground/60 text-sm">
+            3 free roasts · takes 2 minutes ·{" "}
+            <a href="/demo" className="text-red-400 hover:text-red-300 underline underline-offset-2">
+              see a sample roast first
+            </a>
+          </p>
         </motion.div>
       </section>
 
@@ -119,7 +124,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">How it works</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-400">How it works</h2>
             <p className="text-muted-foreground">Brutally honest feedback in under 3 minutes.</p>
           </motion.div>
 
@@ -157,7 +162,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">What you get</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-400">What you get</h2>
             <p className="text-muted-foreground">Not another generic checklist.</p>
           </motion.div>
 
@@ -194,7 +199,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">What people are saying</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-400">What people are saying</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -227,7 +232,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="max-w-2xl mx-auto text-center"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready for the truth?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-400">Ready for the truth?</h2>
           <p className="text-muted-foreground mb-8 text-lg">Your CV is costing you interviews. Find out why — free.</p>
           <ShimmerButton onClick={() => router.push("/upload")}>
             Roast My CV Free →

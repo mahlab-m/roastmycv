@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-white">
+      <body className="min-h-full flex flex-col bg-[#060d1f] text-white">
         {/* Nav */}
         <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md">
           <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
@@ -34,8 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Roast<span className="text-red-500">MyCV</span>
             </Link>
             <div className="flex items-center gap-6">
-              <Link href="/" className="text-sm text-white/50 hover:text-white transition-colors hidden sm:block">
-                How it works
+              <Link href="/demo" className="text-sm text-white/50 hover:text-white transition-colors hidden sm:block">
+                See a sample
               </Link>
               <Link
                 href="/upload"
