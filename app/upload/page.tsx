@@ -125,7 +125,7 @@ export default function UploadPage() {
     <main className="flex-1 flex flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-2xl">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <h1 className="text-3xl font-bold mb-2">Roast my CV</h1>
+          <h1 className="text-3xl font-bold mb-2 text-white">Roast my CV</h1>
           <p className="text-muted-foreground mb-8">Honest feedback that actually helps you get hired.</p>
         </motion.div>
 

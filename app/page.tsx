@@ -60,7 +60,7 @@ export default function Home() {
 
         <AnimatedText
           text="Your CV is costing you interviews."
-          className="text-5xl md:text-7xl font-bold tracking-tight mb-4 max-w-4xl leading-tight text-red-400"
+          className="text-5xl md:text-7xl font-bold tracking-tight mb-4 max-w-4xl leading-tight text-white"
         />
 
         <motion.p
@@ -124,7 +124,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-400">How it works</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">How it works</h2>
             <p className="text-muted-foreground">Brutally honest feedback in under 3 minutes.</p>
           </motion.div>
 
@@ -162,7 +162,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-400">What you get</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">What you get</h2>
             <p className="text-muted-foreground">Not another generic checklist.</p>
           </motion.div>
 
@@ -199,7 +199,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-400">What people are saying</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">What people are saying</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -232,7 +232,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="max-w-2xl mx-auto text-center"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-400">Ready for the truth?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Ready for the truth?</h2>
           <p className="text-muted-foreground mb-8 text-lg">Your CV is costing you interviews. Find out why — free.</p>
           <ShimmerButton onClick={() => router.push("/upload")}>
             Roast My CV Free →

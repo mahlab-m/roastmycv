@@ -125,7 +125,7 @@ export default function DemoPage() {
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <Badge variant="secondary" className="mb-4">Live Demo</Badge>
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-red-400">See a real roast</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">See a real roast</h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
             Alex Johnson is a fictional operations manager. Their CV has all the most common mistakes.
             Here is exactly what our AI found — and how to fix each one.
@@ -234,7 +234,7 @@ export default function DemoPage() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <h2 className="text-2xl font-bold mb-3 text-red-400">Now roast yours</h2>
+          <h2 className="text-2xl font-bold mb-3 text-white">Now roast yours</h2>
           <p className="text-muted-foreground mb-8">Free for the first 3 CVs. No account needed.</p>
           <ShimmerButton onClick={() => router.push("/upload")}>
             Roast My CV Free →

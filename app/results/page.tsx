@@ -91,7 +91,7 @@ export default function ResultsPage() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <p className="text-muted-foreground text-xs uppercase tracking-widest mb-4">Overall Score</p>
+          <p className="text-white/50 text-xs uppercase tracking-widest mb-4">Overall Score</p>
           <div className={`text-9xl font-bold mb-3 ${scoreTextColor(result.overall_score)}`}>
             <NumberTicker value={result.overall_score} />
           </div>
