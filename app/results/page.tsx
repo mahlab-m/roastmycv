@@ -99,7 +99,7 @@ export default function ResultsPage() {
           </span>
           <Card className="max-w-lg mx-auto">
             <CardContent className="pt-6">
-              <p className="text-white/80 text-sm leading-relaxed">{result.summary}</p>
+              <p className="text-white/90 text-sm leading-relaxed">{result.summary}</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -125,7 +125,7 @@ export default function ResultsPage() {
                   <AnimatedScoreBar score={section.score} />
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
-                  <p className="text-white/75 text-sm leading-relaxed">{section.feedback}</p>
+                  <p className="text-white/90 text-sm leading-relaxed">{section.feedback}</p>
                   <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
                     <p className="text-green-400 text-xs uppercase tracking-wider font-medium mb-2">✏️ Suggested rewrite</p>
                     <p className="text-green-100 text-sm leading-relaxed">{section.rewrite}</p>

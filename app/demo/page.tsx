@@ -116,7 +116,7 @@ export default function DemoPage() {
           <span className="inline-block mb-6 text-sm font-semibold px-4 py-1.5 rounded-full bg-red-500/15 border border-red-500/40 text-red-300">Needs major work</span>
           <Card className="max-w-xl mx-auto">
             <CardContent className="pt-6">
-              <p className="text-white/75 text-sm leading-relaxed">{DEMO_RESULT.summary}</p>
+              <p className="text-white/90 text-sm leading-relaxed">{DEMO_RESULT.summary}</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -150,7 +150,7 @@ export default function DemoPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
-                  <p className="text-white/75 text-sm leading-relaxed">{section.feedback}</p>
+                  <p className="text-white/90 text-sm leading-relaxed">{section.feedback}</p>
 
                   {/* Before */}
                   <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
