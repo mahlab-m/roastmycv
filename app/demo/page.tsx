@@ -7,33 +7,6 @@ import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { useRouter } from "next/navigation";
 
 // Fake CV — deliberately bad bullets showing all common mistakes
-const BEFORE_CV = {
-  name: "Alex Johnson",
-  role: "Operations Manager",
-  bullets: [
-    {
-      section: "Work Experience",
-      bad: "Responsible for managing a team of 6 people and overseeing daily operations to ensure targets were met.",
-      problem: "No verb, no mechanism, no result. Could describe literally any manager anywhere.",
-    },
-    {
-      section: "Work Experience",
-      bad: "Helped improve customer satisfaction scores by 75% through various initiatives.",
-      problem: "'Helped' borrows someone else's credit. 75% with no base or mechanism is unbelievable.",
-    },
-    {
-      section: "Work Experience",
-      bad: "Performed data analysis on sales figures and presented findings to senior management.",
-      problem: "Activity with no outcome. What changed because of this analysis?",
-    },
-    {
-      section: "Work Experience",
-      bad: "Was involved in the implementation of a new CRM system across the business.",
-      problem: "'Was involved' — how? What did you actually do? What was the result?",
-    },
-  ],
-};
-
 const DEMO_RESULT = {
   overall_score: 34,
   summary:
@@ -124,40 +97,11 @@ export default function DemoPage() {
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <span className="inline-block mb-4 text-xs font-semibold px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/90">Live Demo</span>
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">See a real roast</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">See a sample roast</h1>
           <p className="text-white/75 max-w-xl mx-auto">
-            Alex Johnson is a fictional operations manager. Their CV has all the most common mistakes.
-            Here is exactly what our AI found — and how to fix each one.
+            Alex Johnson is a fictional operations manager whose CV has all the most common mistakes.
+            Here is the exact roast our AI gives — score, honest feedback, and a rewrite for every section.
           </p>
-        </motion.div>
-
-        {/* The CV being roasted */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-12"
-        >
-          <Card className="border-red-500/20">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="font-bold text-lg">{BEFORE_CV.name}</h2>
-                  <p className="text-white/75 text-sm">{BEFORE_CV.role}</p>
-                </div>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-red-500/15 border border-red-500/40 text-red-300">The CV being roasted</span>
-              </div>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4">
-              {BEFORE_CV.bullets.map((b, i) => (
-                <div key={i} className="border border-border rounded-lg p-4">
-                  <p className="text-xs text-white/75 uppercase tracking-wider mb-2">{b.section}</p>
-                  <p className="text-sm text-white/80 italic mb-2">"{b.bad}"</p>
-                  <p className="text-xs text-red-400">⚠ {b.problem}</p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
         </motion.div>
 
         {/* Overall score */}
