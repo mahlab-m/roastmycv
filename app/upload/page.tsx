@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 const USAGE_KEY = "roastmycv_usage";
 const FREE_LIMIT = 3;
@@ -22,6 +23,14 @@ function incrementUsage(email: string) {
 
 type InputMode = "paste" | "upload";
 
+const loadingMessages = [
+  "Reading your CV...",
+  "Judging every word...",
+  "Comparing to top candidates...",
+  "Preparing brutal feedback...",
+  "Almost done...",
+];
+
 export default function UploadPage() {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -30,60 +39,64 @@ export default function UploadPage() {
   const [fileName, setFileName] = useState("");
   const [inputMode, setInputMode] = useState<InputMode>("paste");
   const [loading, setLoading] = useState(false);
+  const [loadingMsg, setLoadingMsg] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
   const [roastsUsed, setRoastsUsed] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
     setEmail(val);
-    if (val.includes("@")) {
-      setRoastsUsed(getUsageCount(val));
+    if (val.includes("@")) setRoastsUsed(getUsageCount(val));
+  }
+
+  async function processFile(file: File) {
+    setFileName(file.name);
+    setError("");
+    if (file.type === "application/pdf") {
+      const formData = new FormData();
+      formData.append("file", file);
+      try {
+        const res = await fetch("/api/parse-pdf", { method: "POST", body: formData });
+        const data = await res.json();
+        if (data.text) setCvText(data.text);
+        else setError("Could not extract text from PDF. Try pasting instead.");
+      } catch {
+        setError("Failed to read PDF. Try pasting instead.");
+      }
+    } else {
+      const text = await file.text();
+      setCvText(text);
     }
   }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file) return;
-    setFileName(file.name);
-    setError("");
-
-    if (file.type === "application/pdf") {
-      const formData = new FormData();
-      formData.append("file", file);
-      try {
-        const res = await fetch("/api/parse-pdf", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await res.json();
-        if (data.text) {
-          setCvText(data.text);
-        } else {
-          setError("Could not extract text from PDF. Try pasting instead.");
-        }
-      } catch {
-        setError("Failed to read PDF. Try pasting instead.");
-      }
-    } else {
-      // Plain text file
-      const text = await file.text();
-      setCvText(text);
-    }
+    if (file) await processFile(file);
   }
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) await processFile(file);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !cvText.trim()) return;
 
     const count = getUsageCount(email);
-    if (count >= FREE_LIMIT) {
-      setShowModal(true);
-      return;
-    }
+    if (count >= FREE_LIMIT) { setShowModal(true); return; }
 
     setLoading(true);
     setError("");
+
+    // Cycle through loading messages
+    const interval = setInterval(() => {
+      setLoadingMsg(prev => (prev + 1) % loadingMessages.length);
+    }, 1800);
 
     try {
       const res = await fetch("/api/roast", {
@@ -91,9 +104,7 @@ export default function UploadPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, cvText }),
       });
-
       if (!res.ok) throw new Error("API error");
-
       const data = await res.json();
       sessionStorage.setItem("roast_result", JSON.stringify(data));
       incrementUsage(email);
@@ -101,6 +112,7 @@ export default function UploadPage() {
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
+      clearInterval(interval);
       setLoading(false);
     }
   }
@@ -110,18 +122,16 @@ export default function UploadPage() {
   return (
     <main className="flex-1 flex flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-2xl">
-        <h1 className="text-3xl font-bold mb-2">Roast my CV</h1>
-        <p className="text-white/60 mb-8">
-          Honest feedback that actually helps you get hired.
-        </p>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+          <h1 className="text-3xl font-bold mb-2">Roast my CV</h1>
+          <p className="text-white/50 mb-8">Honest feedback that actually helps you get hired.</p>
+        </motion.div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           {/* Email */}
-          <div>
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
             <div className="flex justify-between items-baseline mb-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email address
-              </label>
+              <label htmlFor="email" className="text-sm font-medium">Email address</label>
               {email.includes("@") && (
                 <span className={`text-xs ${roastsRemaining === 0 ? "text-red-400" : "text-white/40"}`}>
                   {roastsRemaining} free roast{roastsRemaining !== 1 ? "s" : ""} remaining
@@ -137,125 +147,145 @@ export default function UploadPage() {
               placeholder="you@example.com"
               className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-red-500 transition-colors"
             />
-          </div>
+          </motion.div>
 
-          {/* Toggle: Paste vs Upload */}
-          <div className="flex gap-2 bg-white/5 rounded-lg p-1">
-            <button
-              type="button"
-              onClick={() => setInputMode("paste")}
-              className={`flex-1 py-2 rounded-md text-sm font-medium transition-colors ${
-                inputMode === "paste"
-                  ? "bg-white/10 text-white"
-                  : "text-white/40 hover:text-white/60"
-              }`}
-            >
-              Paste text
-            </button>
-            <button
-              type="button"
-              onClick={() => setInputMode("upload")}
-              className={`flex-1 py-2 rounded-md text-sm font-medium transition-colors ${
-                inputMode === "upload"
-                  ? "bg-white/10 text-white"
-                  : "text-white/40 hover:text-white/60"
-              }`}
-            >
-              Upload PDF
-            </button>
-          </div>
+          {/* Toggle */}
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+            className="flex gap-2 bg-white/5 rounded-lg p-1">
+            {(["paste", "upload"] as InputMode[]).map(mode => (
+              <button
+                key={mode}
+                type="button"
+                onClick={() => setInputMode(mode)}
+                className={`flex-1 py-2 rounded-md text-sm font-medium transition-colors ${
+                  inputMode === mode ? "bg-white/10 text-white" : "text-white/40 hover:text-white/60"
+                }`}
+              >
+                {mode === "paste" ? "Paste text" : "Upload PDF"}
+              </button>
+            ))}
+          </motion.div>
 
           {/* Paste mode */}
-          {inputMode === "paste" && (
-            <div>
-              <label htmlFor="cv" className="block text-sm font-medium mb-2">
-                Paste your CV
-              </label>
-              <textarea
-                id="cv"
-                required
-                value={cvText}
-                onChange={(e) => setCvText(e.target.value)}
-                placeholder="Paste the full text of your CV here..."
-                rows={16}
-                className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-red-500 transition-colors resize-none font-mono text-sm"
-              />
-            </div>
-          )}
-
-          {/* Upload mode */}
-          {inputMode === "upload" && (
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Upload your CV (PDF)
-              </label>
-              <div
-                onClick={() => fileRef.current?.click()}
-                className="w-full border-2 border-dashed border-white/20 hover:border-red-500/50 rounded-lg px-4 py-12 text-center cursor-pointer transition-colors"
+          <AnimatePresence mode="wait">
+            {inputMode === "paste" && (
+              <motion.div
+                key="paste"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
               >
-                {fileName ? (
-                  <div>
-                    <p className="text-white font-medium">{fileName}</p>
-                    {cvText && (
-                      <p className="text-green-400 text-sm mt-1">
-                        ✓ Text extracted successfully
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <div>
-                    <p className="text-white/40 mb-1">Click to upload your PDF</p>
-                    <p className="text-white/20 text-sm">PDF files only</p>
-                  </div>
-                )}
-              </div>
-              <input
-                ref={fileRef}
-                type="file"
-                accept=".pdf,.txt"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </div>
-          )}
+                <label htmlFor="cv" className="block text-sm font-medium mb-2">Paste your CV</label>
+                <textarea
+                  id="cv"
+                  required
+                  value={cvText}
+                  onChange={(e) => setCvText(e.target.value)}
+                  placeholder="Paste the full text of your CV here..."
+                  rows={16}
+                  className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-red-500 transition-colors resize-none font-mono text-sm"
+                />
+              </motion.div>
+            )}
+
+            {/* Upload / drag and drop mode */}
+            {inputMode === "upload" && (
+              <motion.div
+                key="upload"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+              >
+                <label className="block text-sm font-medium mb-2">Upload your CV (PDF)</label>
+                <div
+                  onClick={() => fileRef.current?.click()}
+                  onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={handleDrop}
+                  className={`w-full border-2 border-dashed rounded-lg px-4 py-16 text-center cursor-pointer transition-all ${
+                    isDragging
+                      ? "border-red-500 bg-red-500/5"
+                      : "border-white/20 hover:border-red-500/50 hover:bg-white/5"
+                  }`}
+                >
+                  {fileName ? (
+                    <div>
+                      <p className="text-2xl mb-2">📄</p>
+                      <p className="text-white font-medium">{fileName}</p>
+                      {cvText && <p className="text-green-400 text-sm mt-1">✓ Text extracted successfully</p>}
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-3xl mb-3">{isDragging ? "📂" : "📄"}</p>
+                      <p className="text-white/60 mb-1">{isDragging ? "Drop it!" : "Drag & drop your PDF here"}</p>
+                      <p className="text-white/30 text-sm">or click to browse</p>
+                    </div>
+                  )}
+                </div>
+                <input ref={fileRef} type="file" accept=".pdf,.txt" onChange={handleFileChange} className="hidden" />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {error && <p className="text-red-400 text-sm">{error}</p>}
 
-          <button
+          <motion.button
             type="submit"
             disabled={loading || !cvText.trim()}
-            className="bg-red-500 hover:bg-red-600 disabled:bg-red-500/50 disabled:cursor-not-allowed text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors"
+            whileHover={{ scale: loading ? 1 : 1.02 }}
+            whileTap={{ scale: loading ? 1 : 0.98 }}
+            className="relative overflow-hidden bg-red-500 hover:bg-red-600 disabled:bg-red-500/50 disabled:cursor-not-allowed text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors"
           >
-            {loading ? "Analysing..." : "Roast It"}
-          </button>
+            {loading ? (
+              <span className="flex items-center justify-center gap-3">
+                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                {loadingMessages[loadingMsg]}
+              </span>
+            ) : "Roast It 🔥"}
+          </motion.button>
         </form>
       </div>
 
       {/* Freemium modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-6">
-          <div className="bg-[#111] border border-white/10 rounded-xl p-8 max-w-md w-full text-center">
-            <h2 className="text-2xl font-bold mb-3">Free limit reached</h2>
-            <p className="text-white/60 mb-6">
-              You have used your 3 free roasts. Upgrade for $5/month for unlimited roasts.
-            </p>
-            <div className="flex flex-col gap-3">
-              <button
-                disabled
-                className="bg-red-500/40 cursor-not-allowed text-white font-semibold px-8 py-3 rounded-lg"
-              >
-                Upgrade to continue
-              </button>
-              <button
-                onClick={() => setShowModal(false)}
-                className="text-white/40 hover:text-white text-sm transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-6"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-[#111] border border-white/10 rounded-xl p-8 max-w-md w-full text-center"
+            >
+              <p className="text-4xl mb-4">🔥</p>
+              <h2 className="text-2xl font-bold mb-3">Free limit reached</h2>
+              <p className="text-white/60 mb-6">
+                You have used your 3 free roasts. Upgrade for $5/month for unlimited roasts.
+              </p>
+              <div className="flex flex-col gap-3">
+                <button
+                  disabled
+                  className="bg-red-500/40 cursor-not-allowed text-white font-semibold px-8 py-3 rounded-lg"
+                >
+                  Upgrade — $5/month (coming soon)
+                </button>
+                <button onClick={() => setShowModal(false)} className="text-white/40 hover:text-white text-sm transition-colors">
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
