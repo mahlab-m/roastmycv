@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { useRouter } from "next/navigation";
 
@@ -124,7 +123,7 @@ export default function DemoPage() {
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <Badge variant="secondary" className="mb-4">Live Demo</Badge>
+          <span className="inline-block mb-4 text-xs font-semibold px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/90">Live Demo</span>
           <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">See a real roast</h1>
           <p className="text-white/75 max-w-xl mx-auto">
             Alex Johnson is a fictional operations manager. Their CV has all the most common mistakes.
@@ -146,7 +145,7 @@ export default function DemoPage() {
                   <h2 className="font-bold text-lg">{BEFORE_CV.name}</h2>
                   <p className="text-white/75 text-sm">{BEFORE_CV.role}</p>
                 </div>
-                <Badge variant="destructive">The CV being roasted</Badge>
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-red-500/15 border border-red-500/40 text-red-300">The CV being roasted</span>
               </div>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
@@ -170,7 +169,7 @@ export default function DemoPage() {
         >
           <p className="text-white/75 text-xs uppercase tracking-widest mb-3">Overall Score</p>
           <div className="text-8xl font-bold text-red-500 mb-3">{DEMO_RESULT.overall_score}</div>
-          <Badge variant="destructive" className="mb-6 text-sm px-3 py-1">Needs major work</Badge>
+          <span className="inline-block mb-6 text-sm font-semibold px-4 py-1.5 rounded-full bg-red-500/15 border border-red-500/40 text-red-300">Needs major work</span>
           <Card className="max-w-xl mx-auto">
             <CardContent className="pt-6">
               <p className="text-white/75 text-sm leading-relaxed">{DEMO_RESULT.summary}</p>
