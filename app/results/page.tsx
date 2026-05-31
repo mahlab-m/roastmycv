@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { NumberTicker } from "@/components/ui/number-ticker";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface Section {
   name: string;
@@ -38,9 +41,15 @@ function scoreLabel(score: number) {
   return "Strong";
 }
 
+function scoreBadgeVariant(score: number): "destructive" | "secondary" | "outline" {
+  if (score < 50) return "destructive";
+  if (score <= 70) return "secondary";
+  return "outline";
+}
+
 function AnimatedScoreBar({ score }: { score: number }) {
   return (
-    <div className="w-full h-1.5 bg-white/10 rounded-full mb-4 overflow-hidden">
+    <div className="w-full h-1.5 bg-muted rounded-full mb-4 overflow-hidden">
       <motion.div
         className={`h-full rounded-full ${scoreBarColor(score)}`}
         initial={{ width: 0 }}
@@ -63,7 +72,7 @@ export default function ResultsPage() {
   if (!result) {
     return (
       <main className="flex-1 flex flex-col items-center justify-center text-center px-6">
-        <p className="text-white/40 mb-4">No roast data found.</p>
+        <p className="text-muted-foreground mb-4">No roast data found.</p>
         <Link href="/upload" className="text-red-500 hover:text-red-400 font-medium transition-colors">
           Go roast your CV →
         </Link>
@@ -82,20 +91,22 @@ export default function ResultsPage() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <p className="text-white/40 text-xs uppercase tracking-widest mb-4">Overall Score</p>
+          <p className="text-muted-foreground text-xs uppercase tracking-widest mb-4">Overall Score</p>
           <div className={`text-9xl font-bold mb-3 ${scoreTextColor(result.overall_score)}`}>
             <NumberTicker value={result.overall_score} />
           </div>
-          <p className={`text-sm font-medium mb-6 ${scoreTextColor(result.overall_score)}`}>
+          <Badge variant={scoreBadgeVariant(result.overall_score)} className="mb-6 text-sm px-3 py-1">
             {scoreLabel(result.overall_score)}
-          </p>
-          <div className="max-w-lg mx-auto bg-white/5 border border-white/10 rounded-xl p-6">
-            <p className="text-white/70 text-sm leading-relaxed">{result.summary}</p>
-          </div>
+          </Badge>
+          <Card className="max-w-lg mx-auto">
+            <CardContent className="pt-6">
+              <p className="text-muted-foreground text-sm leading-relaxed">{result.summary}</p>
+            </CardContent>
+          </Card>
         </motion.div>
 
-        {/* Section breakdown */}
-        <div className="flex flex-col gap-6">
+        {/* Sections */}
+        <div className="flex flex-col gap-5">
           {result.sections.map((section, i) => (
             <motion.div
               key={section.name}
@@ -103,31 +114,25 @@ export default function ResultsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="border border-white/10 hover:border-white/20 rounded-xl p-6 transition-colors"
             >
-              {/* Header */}
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="font-semibold">{section.name}</h2>
-                <span className={`font-bold text-xl ${scoreTextColor(section.score)}`}>
-                  {section.score}
-                </span>
-              </div>
-
-              {/* Animated score bar */}
-              <AnimatedScoreBar score={section.score} />
-
-              {/* Feedback */}
-              <p className="text-white/60 text-sm leading-relaxed mb-4">
-                {section.feedback}
-              </p>
-
-              {/* Rewrite */}
-              <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                <p className="text-green-400 text-xs uppercase tracking-wider font-medium mb-2">
-                  ✏️ Suggested rewrite
-                </p>
-                <p className="text-green-100 text-sm leading-relaxed">{section.rewrite}</p>
-              </div>
+              <Card className="hover:border-white/20 transition-colors">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <h2 className="font-semibold">{section.name}</h2>
+                    <span className={`font-bold text-xl ${scoreTextColor(section.score)}`}>
+                      {section.score}
+                    </span>
+                  </div>
+                  <AnimatedScoreBar score={section.score} />
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                  <p className="text-muted-foreground text-sm leading-relaxed">{section.feedback}</p>
+                  <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
+                    <p className="text-green-400 text-xs uppercase tracking-wider font-medium mb-2">✏️ Suggested rewrite</p>
+                    <p className="text-green-100 text-sm leading-relaxed">{section.rewrite}</p>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           ))}
         </div>
@@ -137,25 +142,24 @@ export default function ResultsPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
           className="mt-12 flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <Link
-            href="/upload"
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-4 rounded-lg text-center transition-colors"
-          >
-            Roast Another CV
+          <Link href="/upload">
+            <Button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-6 text-base w-full">
+              Roast Another CV
+            </Button>
           </Link>
-          <button
+          <Button
+            variant="outline"
+            className="py-6 text-base"
             onClick={() => {
               const text = `I got ${result.overall_score}/100 on RoastMyCV 🔥 Get your CV brutally roasted by AI → roastmycv-ashen.vercel.app`;
               navigator.clipboard.writeText(text);
-              alert("Copied to clipboard! Share it 🔥");
+              alert("Copied! Share it 🔥");
             }}
-            className="border border-white/20 hover:border-white/40 text-white font-semibold px-8 py-4 rounded-lg text-center transition-colors"
           >
             Share my score 🔥
-          </button>
+          </Button>
         </motion.div>
       </div>
     </main>
