@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 interface Section {
@@ -39,12 +38,6 @@ function scoreLabel(score: number) {
   if (score < 70) return "Getting there";
   if (score < 85) return "Pretty good";
   return "Strong";
-}
-
-function scoreBadgeVariant(score: number): "destructive" | "secondary" | "outline" {
-  if (score < 50) return "destructive";
-  if (score <= 70) return "secondary";
-  return "outline";
 }
 
 function AnimatedScoreBar({ score }: { score: number }) {
@@ -95,12 +88,18 @@ export default function ResultsPage() {
           <div className={`text-9xl font-bold mb-3 ${scoreTextColor(result.overall_score)}`}>
             <NumberTicker value={result.overall_score} />
           </div>
-          <Badge variant={scoreBadgeVariant(result.overall_score)} className="mb-6 text-sm px-3 py-1">
+          <span className={`inline-block mb-6 text-sm font-semibold px-4 py-1.5 rounded-full border ${
+            result.overall_score < 50
+              ? "bg-red-500/15 border-red-500/40 text-red-300"
+              : result.overall_score <= 70
+              ? "bg-amber-500/15 border-amber-500/40 text-amber-300"
+              : "bg-green-500/15 border-green-500/40 text-green-300"
+          }`}>
             {scoreLabel(result.overall_score)}
-          </Badge>
+          </span>
           <Card className="max-w-lg mx-auto">
             <CardContent className="pt-6">
-              <p className="text-muted-foreground text-sm leading-relaxed">{result.summary}</p>
+              <p className="text-white/80 text-sm leading-relaxed">{result.summary}</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -126,7 +125,7 @@ export default function ResultsPage() {
                   <AnimatedScoreBar score={section.score} />
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
-                  <p className="text-muted-foreground text-sm leading-relaxed">{section.feedback}</p>
+                  <p className="text-white/75 text-sm leading-relaxed">{section.feedback}</p>
                   <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
                     <p className="text-green-400 text-xs uppercase tracking-wider font-medium mb-2">✏️ Suggested rewrite</p>
                     <p className="text-green-100 text-sm leading-relaxed">{section.rewrite}</p>

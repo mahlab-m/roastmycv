@@ -126,7 +126,7 @@ export default function DemoPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <Badge variant="secondary" className="mb-4">Live Demo</Badge>
           <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">See a real roast</h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-white/75 max-w-xl mx-auto">
             Alex Johnson is a fictional operations manager. Their CV has all the most common mistakes.
             Here is exactly what our AI found — and how to fix each one.
           </p>
@@ -144,7 +144,7 @@ export default function DemoPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-bold text-lg">{BEFORE_CV.name}</h2>
-                  <p className="text-muted-foreground text-sm">{BEFORE_CV.role}</p>
+                  <p className="text-white/75 text-sm">{BEFORE_CV.role}</p>
                 </div>
                 <Badge variant="destructive">The CV being roasted</Badge>
               </div>
@@ -152,7 +152,7 @@ export default function DemoPage() {
             <CardContent className="flex flex-col gap-4">
               {BEFORE_CV.bullets.map((b, i) => (
                 <div key={i} className="border border-border rounded-lg p-4">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{b.section}</p>
+                  <p className="text-xs text-white/75 uppercase tracking-wider mb-2">{b.section}</p>
                   <p className="text-sm text-white/80 italic mb-2">"{b.bad}"</p>
                   <p className="text-xs text-red-400">⚠ {b.problem}</p>
                 </div>
@@ -168,12 +168,12 @@ export default function DemoPage() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <p className="text-muted-foreground text-xs uppercase tracking-widest mb-3">Overall Score</p>
+          <p className="text-white/75 text-xs uppercase tracking-widest mb-3">Overall Score</p>
           <div className="text-8xl font-bold text-red-500 mb-3">{DEMO_RESULT.overall_score}</div>
           <Badge variant="destructive" className="mb-6 text-sm px-3 py-1">Needs major work</Badge>
           <Card className="max-w-xl mx-auto">
             <CardContent className="pt-6">
-              <p className="text-muted-foreground text-sm leading-relaxed">{DEMO_RESULT.summary}</p>
+              <p className="text-white/75 text-sm leading-relaxed">{DEMO_RESULT.summary}</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -207,7 +207,7 @@ export default function DemoPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-4">
-                  <p className="text-muted-foreground text-sm leading-relaxed">{section.feedback}</p>
+                  <p className="text-white/75 text-sm leading-relaxed">{section.feedback}</p>
 
                   {/* Before */}
                   <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
@@ -219,7 +219,7 @@ export default function DemoPage() {
                   <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
                     <p className="text-green-400 text-xs uppercase tracking-wider font-medium mb-2">✅ Rewritten bullet</p>
                     <p className="text-green-100 text-sm leading-relaxed">"{section.good_example}"</p>
-                    <p className="text-green-400/60 text-xs mt-2 font-mono">{section.formula_breakdown}</p>
+                    <p className="text-green-400/80 text-xs mt-2 font-mono">{section.formula_breakdown}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -235,7 +235,7 @@ export default function DemoPage() {
           className="text-center"
         >
           <h2 className="text-2xl font-bold mb-3 text-white">Now roast yours</h2>
-          <p className="text-muted-foreground mb-8">Free for the first 3 CVs. No account needed.</p>
+          <p className="text-white/75 mb-8">Free for the first 3 CVs. No account needed.</p>
           <ShimmerButton onClick={() => router.push("/upload")}>
             Roast My CV Free →
           </ShimmerButton>

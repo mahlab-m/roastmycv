@@ -78,19 +78,19 @@ export default function Home() {
           animate="visible"
           variants={fadeUp}
           custom={5}
-          className="text-lg text-muted-foreground max-w-lg mb-10"
+          className="text-lg text-white/70 max-w-lg mb-10"
         >
-          AI that reads your CV like a BCG consultant and tells you exactly what's wrong — with rewrites you can use immediately.
+          AI that reads your CV the way a top recruiter does and tells you exactly what's wrong - with rewrites you can use immediately.
         </motion.p>
 
         <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={6} className="flex flex-col items-center gap-4">
           <ShimmerButton onClick={() => router.push("/upload")}>
             Roast My CV Free →
           </ShimmerButton>
-          <p className="text-muted-foreground/60 text-sm">
+          <p className="text-white/70 text-sm">
             3 free roasts · takes 2 minutes ·{" "}
-            <a href="/demo" className="text-red-400 hover:text-red-300 underline underline-offset-2">
-              see a sample roast first
+            <a href="/demo" className="text-red-400 hover:text-red-300 font-medium underline underline-offset-2">
+              see a sample roast first →
             </a>
           </p>
         </motion.div>
@@ -143,7 +143,7 @@ export default function Home() {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 className="bg-card border border-border rounded-2xl p-6 relative"
               >
-                <span className="text-red-500/30 font-bold text-5xl absolute top-4 right-5 select-none">{step}</span>
+                <span className="text-red-500/70 font-bold text-5xl absolute top-4 right-5 select-none">{step}</span>
                 <div className="text-3xl mb-4">{icon}</div>
                 <h3 className="font-semibold text-lg mb-2">{title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
@@ -212,8 +212,8 @@ export default function Home() {
                 transition={{ delay: i * 0.15 }}
                 className="bg-card border border-border rounded-2xl p-6 flex flex-col gap-4"
               >
-                <p className="text-red-400 text-xl">"</p>
-                <p className="text-sm text-foreground/80 leading-relaxed flex-1">{quote}</p>
+                <p className="text-red-500 text-5xl leading-none font-serif h-6">&ldquo;</p>
+                <p className="text-sm text-white/90 leading-relaxed flex-1">{quote}</p>
                 <div>
                   <p className="font-semibold text-sm">{name}</p>
                   <p className="text-muted-foreground text-xs">{role}</p>

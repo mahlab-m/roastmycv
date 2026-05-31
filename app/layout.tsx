@@ -34,8 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Roast<span className="text-red-500">MyCV</span>
             </Link>
             <div className="flex items-center gap-6">
-              <Link href="/demo" className="text-sm text-white/50 hover:text-white transition-colors hidden sm:block">
-                See a sample
+              <Link href="/demo" className="text-sm text-white/80 hover:text-white transition-colors hidden sm:flex items-center gap-1.5">
+                <span>👀</span> See a sample
               </Link>
               <Link
                 href="/upload"

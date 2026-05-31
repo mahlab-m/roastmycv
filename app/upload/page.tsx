@@ -126,7 +126,7 @@ export default function UploadPage() {
       <div className="w-full max-w-2xl">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
           <h1 className="text-3xl font-bold mb-2 text-white">Roast my CV</h1>
-          <p className="text-muted-foreground mb-8">Honest feedback that actually helps you get hired.</p>
+          <p className="text-white/70 mb-8">Honest feedback that actually helps you get hired.</p>
         </motion.div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -228,7 +228,7 @@ export default function UploadPage() {
             <Button
               type="submit"
               disabled={loading || !cvText.trim()}
-              className="w-full bg-red-500 hover:bg-red-600 disabled:bg-red-500/50 text-white font-semibold py-6 text-lg"
+              className="w-full bg-red-500 hover:bg-red-600 disabled:bg-white/10 disabled:text-white/40 text-white font-semibold py-6 text-lg"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-3">
