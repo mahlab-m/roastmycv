@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { NumberTicker } from "@/components/ui/number-ticker";
 
 interface Section {
   name: string;
@@ -63,7 +65,7 @@ export default function ResultsPage() {
           <div
             className={`text-8xl font-bold mb-6 ${scoreTextColor(result.overall_score)}`}
           >
-            {result.overall_score}
+            <NumberTicker value={result.overall_score} />
           </div>
           <p className="text-white/70 text-lg leading-relaxed">
             {result.summary}
