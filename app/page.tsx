@@ -27,7 +27,7 @@ const testimonials = [
     role: "Product Manager, Dubai",
   },
   {
-    quote: "My old CV scored 38. After applying the fixes it jumped to 74. Got a call from BCG the following week.",
+    quote: "My old CV scored 38. After applying the fixes it jumped to 74. Got a call from a top firm the following week.",
     name: "James T.",
     role: "Strategy Analyst, London",
   },
@@ -131,7 +131,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { step: "01", title: "Paste or upload your CV", desc: "Paste your CV text or upload a PDF. No account needed to start.", icon: "📋" },
-              { step: "02", title: "AI analyses every bullet", desc: "Claude reads your CV against the same framework used at BCG and top startups.", icon: "🧠" },
+              { step: "02", title: "AI analyses every bullet", desc: "Claude reads your CV against the framework top recruiters and hiring managers use.", icon: "🧠" },
               { step: "03", title: "Get brutal feedback + rewrites", desc: "Specific critiques and ready-to-use rewrites — not vague tips like 'be more specific'.", icon: "🔥" },
             ].map(({ step, title, desc, icon }, i) => (
               <motion.div
